@@ -1,0 +1,43 @@
+#!/bin/bash
+
+function quig_resolve()
+{
+    # check dependencies
+    # ref: https://stackoverflow.com/a/33297935
+    type curl >/dev/null 2>&1 || { echo >&2 "ERROR: curl required but it's not installed. Aborting."; exit 1; }
+    type jq >/dev/null 2>&1 || { echo >&2 "ERROR: jq required but it's not installed. Aborting."; exit 1; }
+
+    # set default
+    local default="release"
+    if [ -n "$QUARTO_VERSION" ]; then
+        local default="$QUARTO_VERSION"
+    fi
+
+    # parse argument
+    local arg="$default"
+    if [ -n "$1" ]; then
+        local arg=$1
+    fi
+
+    # resolve version
+    local version=$arg
+    if [ $arg == "release" ]; then
+        local version=$(curl -s https://quarto.org/docs/download/_download.json | jq -r .version)
+    elif [ $arg == "pre_release" ]; then
+        local version=$(curl -s https://quarto.org/docs/download/_prerelease.json | jq -r .version)
+    fi
+
+    # validate version
+    if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo >&2 "ERROR: Version must be 'release', 'pre_release' or formatted like '1.2.3'. You provided: '$version'."; exit 1;
+    fi
+
+    # return version
+    echo "$version"
+}
+
+
+if [[ "$1" == "resolve" ]]; then
+    version=$(quig_resolve $2)
+    echo $version    
+fi
