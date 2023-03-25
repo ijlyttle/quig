@@ -9,6 +9,10 @@ It is inspired by [pyenv](https://github.com/pyenv/pyenv) and [rig](https://gith
 (not yet working, this is aspirational)
 
 ```bash
+quig resolve pre_release
+```
+
+```bash
 quig add
 ```
 
