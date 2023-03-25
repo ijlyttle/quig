@@ -36,6 +36,25 @@ function quig_resolve()
     echo "$version"
 }
 
+function quig_list()
+{
+  echo "not done yet"
+}
+
+function quig_default()
+{
+  echo "not done yet"
+}
+
+function quig_add()
+{
+  echo "not done yet"
+}
+
+function quig_rm()
+{
+  echo "not done yet"
+}
 
 if [[ "$1" == "resolve" ]]; then
     version=$(quig_resolve $2)
