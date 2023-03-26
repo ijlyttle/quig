@@ -1,6 +1,6 @@
 #!/bin/bash
 
-quarto_directory="/opt/quarto/"
+quarto_directory="/opt/quarto"
 regex_version="[0-9]+\.[0-9]+\.[0-9]+"
 quarto_shim="/usr/local/bin/quarto"
 
@@ -41,9 +41,29 @@ function quig_resolve()
     echo "$version"
 }
 
+function quig_extract(){
+    if ! local version=$(echo $1 | sed -E "s/^\/opt\/quarto\/($regex_version)\/bin\/quarto$/\1/"); then
+        exit 1
+    fi
+
+    echo "$version"
+    exit 0  
+}
+
 function quig_list()
 {
-    echo "not done yet"
+    local path_array=($quarto_directory/*/bin/quarto)
+
+    local version_array=()
+    for path in "${path_array[@]}"
+    do
+        if local version=$(quig_extract $path); then
+            version_array+=($version)
+        fi
+    done
+
+    echo "${version_array[@]}"
+    exit 0
 }
 
 function quig_default_get()
@@ -54,13 +74,12 @@ function quig_default_get()
     fi
 
     local rpath=$(realpath $quarto_shim) 
-        
-    if ! local version=$(echo $rpath | sed -E "s/^\/opt\/quarto\/($regex_version)\/bin\/quarto$/\1/"); then
-        echo "nothing"
-        exit 1
+
+    if ! local version=$(quig_extract $rpath); then
+      exit 1
     fi
 
-    echo $version
+    echo "$version"
     exit 0
 }
 
@@ -79,6 +98,7 @@ function quig_default_set()
     # link shim to target
     ln -sf $quarto_target $quarto_shim
 
+    echo "$version"
     exit 0
 }
 
@@ -150,6 +170,27 @@ if [[ "$1" == "default" ]]; then
         exit 1
     fi
     
-    echo "$version"    
+    echo "Default quarto version is $version"    
+    exit 0   
+fi
+
+if [[ "$1" == "list" ]]; then
+
+    # use outer set of parens to parse arrya
+    if ! version_array=($(quig_list)); then
+        echo "No versions found"     
+        exit 1
+    fi
+    
+    version_default=$(quig_default)
+
+    for version in "${version_array[@]}"
+    do
+        default=""
+        if [[ "$version" == "$version_default" ]]; then
+          default="(default)"
+        fi
+        echo $version $default
+    done
     exit 0   
 fi
