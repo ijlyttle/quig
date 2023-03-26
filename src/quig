@@ -1,5 +1,9 @@
 #!/bin/bash
 
+quarto_directory="/opt/quarto/"
+regex_version="[0-9]+\.[0-9]+\.[0-9]+"
+quarto_shim="/usr/local/bin/quarto"
+
 function quig_resolve()
 {
     # check dependencies
@@ -28,8 +32,9 @@ function quig_resolve()
     fi
 
     # validate version
-    if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        echo >&2 "ERROR: Version must be 'release', 'pre_release' or formatted like '1.2.3'. You provided: '$version'."; exit 1;
+    if [[ ! $version =~ ^$regex_version$ ]]; then
+        echo >&2 "ERROR: Version must be 'release', 'pre_release' or formatted like '1.2.3'. You provided: '$version'." 
+        exit 1
     fi
 
     # return version
@@ -38,25 +43,113 @@ function quig_resolve()
 
 function quig_list()
 {
-  echo "not done yet"
+    echo "not done yet"
 }
 
-function quig_default()
+function quig_default_get()
 {
-  echo "not done yet"
+    if ! [ -f $quarto_shim ]; then
+      echo "ERROR: Cannot find quarto installation at $quarto_shim"
+      exit 1
+    fi
+
+    local rpath=$(realpath $quarto_shim) 
+        
+    if ! local version=$(echo $rpath | sed -E "s/^\/opt\/quarto\/($regex_version)\/bin\/quarto$/\1/"); then
+        echo "nothing"
+        exit 1
+    fi
+
+    echo $version
+    exit 0
 }
+
+function quig_default_set()
+{
+
+    local version="$1"
+    local quarto_target="/opt/quarto/$version/bin/quarto"
+
+    # make sure target installation exists
+    if [ ! -f "$quarto_target" ]; then 
+        echo "Quarto installation not found at $quarto_target"
+        exit 1
+    fi
+
+    # link shim to target
+    ln -sf $quarto_target $quarto_shim
+
+    exit 0
+}
+
+function quig_default() {
+
+    # if arg provided, set
+    if [ -n "$1" ]; then
+        if ! version=$(quig_default_set $1); then
+            echo $version 
+            exit 1
+        fi
+    fi
+
+    # get default, return
+    if ! local version=$(quig_default_get); then
+        echo $version 
+        exit 1
+    fi
+    
+    echo $version
+    exit 0
+}
+
 
 function quig_add()
 {
-  echo "not done yet"
+    
+    if ! local version=$(quig_resolve $1); then
+        exit 1
+    fi
+
+    echo "$version"
 }
 
 function quig_rm()
 {
-  echo "not done yet"
+    echo "not done yet"
+}
+
+function quig_help()
+{
+    echo "not done yet"
 }
 
 if [[ "$1" == "resolve" ]]; then
-    version=$(quig_resolve $2)
-    echo $version    
+
+    if ! version=$(quig_add $2); then
+        exit 1
+    fi
+
+    echo "$version"
+    exit 0    
+fi
+
+if [[ "$1" == "add" ]]; then
+
+    if ! version=$(quig_add $2); then
+        exit 1
+    fi
+    
+    echo "$version"    
+    exit 0    
+fi
+
+if [[ "$1" == "default" ]]; then
+
+    if ! version=$(quig_default $2); then
+        echo "$version"     
+        exit 1
+    fi
+    
+    echo "$version"    
+    exit 0   
 fi

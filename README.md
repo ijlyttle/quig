@@ -13,15 +13,15 @@ quig resolve pre_release
 ```
 
 ```bash
-quig add
+sudo quig add
 ```
 
 ```bash
-(QUARTO_VERSION=pre_release quig add)
+(QUARTO_VERSION=pre_release sudo quig add)
 ```
 
 ```bash
-quig add pre_release
+sudo quig add pre_release
 ```
 
 ```bash
@@ -29,11 +29,11 @@ quig list
 ```
 
 ```bash
-quig default 1.3.147
+sudo quig default 1.3.147
 ```
 
 ```bash
-quig rm 1.3.147
+sudo quig rm 1.3.147
 ``` 
 
 ## Installation
