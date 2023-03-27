@@ -32,7 +32,7 @@ function quig_resolve()
     fi
 
     # validate version
-    if [[ ! $version =~ ^$regex_version$ ]]; then
+    if [[ ! "$version" =~ ^$regex_version$ ]]; then
         echo >&2 "ERROR: Version must be 'release', 'pre_release' or formatted like '1.2.3'. You provided: '$version'." 
         exit 1
     fi
@@ -48,7 +48,7 @@ function quig_tar_url() {
     local url_path="https://github.com/quarto-dev/quarto-cli/releases/download/v$version"
 
     # is it Mac?
-    if [[ "$OSTYPE"=~"^darwin" ]]; then
+    if [[ "$OSTYPE" =~ ^darwin ]]; then
         echo "$url_path/quarto-$version-macos.tar.gz"
         exit 0
     fi
