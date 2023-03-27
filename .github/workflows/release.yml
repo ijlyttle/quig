@@ -13,6 +13,7 @@ jobs:
 
       - name: Build tarball
         run: |
+          pwd
           ls -l
 
 
