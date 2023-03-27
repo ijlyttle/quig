@@ -11,11 +11,13 @@ It is inspired by [pyenv](https://github.com/pyenv/pyenv) and [rig](https://gith
 
 This follows the strategy outlined in [Posit's "Quarto Install" document](https://docs.posit.co/resources/install-quarto/#quarto-tar-file-install):
 
+- maintain a collection of Quarto versions at `/opt/quarto/`.
+
 - download a `tar.gz` file according to the version, platform (MacOS or Linux), and Linux architecture (`amd64` or `arm64`).
 
-- unpack it into `/opt/quarto/<version>/` (delete tarball).
+- unpack it into `/opt/quarto/<version>/`.
 
-- add a symbolic link to `/usr/local/bin/quarto`.
+- add a symbolic link from `/usr/local/bin/quarto` to a `default` version in the collection.
 
 ## Usage
 
