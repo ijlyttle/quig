@@ -19,7 +19,7 @@ This follows the strategy outlined in [Posit's "Quarto Install" document](https:
 
 ## Usage
 
-Certain of these commands will require privileges; you will be prompted if needed.
+Certain of these commands will require root privileges; you will be prompted if needed.
 
 Use `quig add` to add a version to your collection:
 
