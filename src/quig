@@ -182,6 +182,7 @@ function quig_add()
 
     # download to temp file
     local tmpdir=$(mktemp -d)
+    echo >&2 "Downloading $url"
     curl -o "${tmpdir}/quarto.tar.gz" -L $url
     exit_status=$?
     if [ $exit_status -gt 0 ]; then
@@ -429,7 +430,7 @@ if [[ "$1" == "upgrade" ]]; then
         sudo "$0" "$@"
         exit $?
     fi
-    
+
     # add
     version=$(quig_add $2)
     exit_status=$?    
