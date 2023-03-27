@@ -1,6 +1,6 @@
 # quig
 
-The purpose of **quig** is to help you manage installation of [Quarto](https://quarto.org/) versions on MacOS or (Ubuntu) Linux.
+The purpose of **quig** is to help you manage versions of [Quarto](https://quarto.org/) versions on MacOS or (Ubuntu) Linux.
 If you use Windows, you could use this with WSL or an Ubuntu container.
 
 This is aimed at folks who want to stay current with the "bleeding-edge" of Quarto, and thus may find it handy to work with multiple versions, switching between them.
