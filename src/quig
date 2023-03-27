@@ -178,7 +178,7 @@ function quig_add()
     fi
 
     # unpack into /opt/quarto/
-    tar -zxvf "${tmpdir}/quarto.tar.gz" -C "/opt/quarto/${version}" --strip-components=1
+    tar -zxf "${tmpdir}/quarto.tar.gz" -C "/opt/quarto/${version}" --strip-components=1 
 
     # delete temp file
     rm -r $tmpdir
