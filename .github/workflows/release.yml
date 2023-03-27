@@ -1,7 +1,7 @@
 on:  
   push:
-    tags: "*"
-  pull-request: ["main"]
+    tags: ["*"]
+  pull-request: [main]
 
 jobs:
   build:
