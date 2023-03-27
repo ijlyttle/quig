@@ -32,7 +32,7 @@ function quig_resolve()
     fi
 
     # validate version
-    if [[ ! $version=~^$regex_version$ ]]; then
+    if [[ ! $version =~ ^$regex_version$ ]]; then
         echo >&2 "ERROR: Version must be 'release', 'pre_release' or formatted like '1.2.3'. You provided: '$version'." 
         exit 1
     fi
@@ -47,7 +47,7 @@ function quig_tar_url() {
     local version=$1
     local url_path="https://github.com/quarto-dev/quarto-cli/releases/download/v$version"
 
-    # is it mac?
+    # is it Mac?
     if [[ "$OSTYPE"=~"^darwin" ]]; then
         echo "$url_path/quarto-$version-macos.tar.gz"
         exit 0
@@ -60,6 +60,7 @@ function quig_tar_url() {
         exit 0
     fi
     
+    echo >&2 "ERROR: Cannot create URL for download, platform not supported."
     exit 1
 }
 
@@ -156,19 +157,33 @@ function quig_add()
     fi
 
     # test if version exists locally
+    if [[ -f "$quarto_directory/$version/bin/quarto" ]]; then
+        echo >&2 "Quarto version $version already exits at \`/opt/quarto\`."
+        exit 1
+    fi
 
-    # determine download file
+    # create directory
+    mkdir -p "$quarto_directory/$version"
+
+    # determine download URL
     local url=$(quig_tar_url $version)
 
     # download to temp file
+    local tmpdir=$(mktemp -d)
+    curl -o "${tmpdir}/quarto.tar.gz" -L $url
+    exit_status=$?
+    if [ $exit_status -gt 0 ]; then
+        echo >&2 "ERROR: Cannot download file $url"
+        exit 1
+    fi
 
     # unpack into /opt/quarto/
+    tar -zxvf "${tmpdir}/quarto.tar.gz" -C "/opt/quarto/${version}" --strip-components=1
 
     # delete temp file
+    rm -r $tmpdir
 
-    # create symlink
-
-    echo "$url"
+    echo "$version"
     exit 0
 }
 
@@ -180,12 +195,64 @@ function quig_rm()
 
 function quig_help()
 {
-    echo "not done yet"
+    echo "\n"
+    echo "NAME\n"
+    echo "\t  quig - manage Quarto installations\n"
+    echo "\n"
+    echo "DESCRIPTION\n"
+    echo "\t  quig manages your Quarto installations on MacOS and Ubuntu\n" 
+    echo "\t  (including WSL and containters). Following rig and pyenv,\n"
+    echo "\t  you can have multiple Quarto versions installed, and choose\n"
+    echo "\t  which one is active.\n"
+    echo "\n"
+    echo "\t  quig is *very* experimental. Should it prove useful, it is hoped it\n"
+    echo "\t  could be built and maintained more robustly, and could support\n"
+    echo "\t  more platforms.\n"
+    echo "\n"
+    echo "\t  The API for quig tries to follow the API for rig.\n"
+    echo "\n"
+    echo "\t  The implementation is straightforward:\n"
+    echo "\t  - each Quarto version has its own directory: \`/opt/quarto/<version>\`.\n"
+    echo "\t  - manages symlink from \`/usr/local/bin/quarto\` to \`/opt/quarto/<version>\`.\n"
+    echo "\n"
+    echo "USAGE:\n"
+    echo "\t  quig [SUBCOMMAND]\n"
+    echo "\n"
+    echo "SUBCOMMANDS:\n"
+    echo "\t  add\n"
+    echo "\t  default\n"
+    echo "\t  help\n"
+    echo "\t  list\n"
+    echo "\t  resolve\n"
+    echo "\t  rm\n"
+    echo "\t  upgrade\n"
+    echo "\n"
+    echo "EXAMPLES:\n"
+    echo "\t  # Add latest pre-release snapshot\n"
+    echo "\t  sudo quig add pre_release\n"
+    echo "\n"
+    echo "\t  # Add version based \$QUARTO_VERSION or use \"release\"\n"
+    echo "\t  sudo quig add\n"
+    echo "\n"
+    echo "\t  # Add specific version\n"
+    echo "\t  sudo quig add 1.3.290\n"
+    echo "\n"
+    echo "\t  # List installed versions\n"
+    echo "\t  quig list\n"
+    echo "\n"
+    echo "\t  # Set default version\n"
+    echo "\t  sudo quig default 1.3.290\n"
+    echo "\n"
+    echo "\t  # Add pre_release version, set as default, remove all other versions\n"
+    echo "\t  quig upgrade pre_release\n"
 }
 
 if [[ "$1" == "resolve" ]]; then
 
-    if ! version=$(quig_resolve $2); then
+    version=$(quig_resolve $2)
+    exit_status=$?
+    if [ $exit_status -gt 0 ]; then
+        echo >&2 "ERROR: Cannot resolve version."
         exit 1
     fi
 
@@ -198,20 +265,23 @@ if [[ "$1" == "add" ]]; then
     version=$(quig_add $2)
     exit_status=$?    
     if [ $exit_status -gt 0 ]; then
+        echo >&2 "Quarto version $2 not installed."
         exit 1
     fi
     
-    echo "$version"    
+    echo "Added Quarto $version to \`$quarto_directory\`"    
     exit 0    
 fi
 
 if [[ "$1" == "default" ]]; then
-
-    if ! version=$(quig_default $2); then
-        echo "$version"     
+    
+    version=$(quig_default $2)
+    exit_status=$?    
+    if [ $exit_status -gt 0 ]; then
+        echo >&2 "ERROR: Cannot set default Quarto version."
         exit 1
     fi
-    
+
     echo "Default quarto version is $version"    
     exit 0   
 fi
@@ -230,9 +300,14 @@ if [[ "$1" == "list" ]]; then
     do
         default=""
         if [[ "$version" == "$version_default" ]]; then
-          default="(default)"
+            default="(default)"
         fi
         echo $version $default
     done
     exit 0   
+fi
+
+if [[ "$1" == "help" || -z $1 ]]; then
+    echo -e $(quig_help)
+    exit 0
 fi
