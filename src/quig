@@ -32,13 +32,35 @@ function quig_resolve()
     fi
 
     # validate version
-    if [[ ! $version =~ ^$regex_version$ ]]; then
+    if [[ ! $version=~^$regex_version$ ]]; then
         echo >&2 "ERROR: Version must be 'release', 'pre_release' or formatted like '1.2.3'. You provided: '$version'." 
         exit 1
     fi
 
     # return version
     echo "$version"
+    exit 0
+}
+
+function quig_tar_url() {
+
+    local version=$1
+    local url_path="https://github.com/quarto-dev/quarto-cli/releases/download/v$version"
+
+    # is it mac?
+    if [[ "$OSTYPE"=~"^darwin" ]]; then
+        echo "$url_path/quarto-$version-macos.tar.gz"
+        exit 0
+    fi
+
+    # is it Ubuntu?
+    if [[ $(awk -F= '/^NAME/{print $2}' /etc/os-release | sed s/\"//g)="Ubuntu" ]]; then
+        local arch=$(dpkg --print-architecture)
+        echo "$url_path/quarto-$version-linux-$arch.tar.gz"
+        exit 0
+    fi
+    
+    exit 1
 }
 
 function quig_extract(){
@@ -69,14 +91,14 @@ function quig_list()
 function quig_default_get()
 {
     if ! [ -f $quarto_shim ]; then
-      echo "ERROR: Cannot find quarto installation at $quarto_shim"
-      exit 1
+        echo >&2 "ERROR: Cannot find quarto installation at $quarto_shim"
+        exit 1
     fi
 
     local rpath=$(realpath $quarto_shim) 
 
     if ! local version=$(quig_extract $rpath); then
-      exit 1
+        exit 1
     fi
 
     echo "$version"
@@ -122,19 +144,37 @@ function quig_default() {
     exit 0
 }
 
-
 function quig_add()
 {
-    
-    if ! local version=$(quig_resolve $1); then
+
+    # resolve version
+    local version=$(quig_resolve $1)
+    local exit_status=$?
+    if [ $exit_status -gt 0 ]; then
+        echo >&2 "ERROR: Cannot resolve version."
         exit 1
     fi
 
-    echo "$version"
+    # test if version exists locally
+
+    # determine download file
+    local url=$(quig_tar_url $version)
+
+    # download to temp file
+
+    # unpack into /opt/quarto/
+
+    # delete temp file
+
+    # create symlink
+
+    echo "$url"
+    exit 0
 }
 
 function quig_rm()
 {
+    # don't delete default
     echo "not done yet"
 }
 
@@ -145,7 +185,7 @@ function quig_help()
 
 if [[ "$1" == "resolve" ]]; then
 
-    if ! version=$(quig_add $2); then
+    if ! version=$(quig_resolve $2); then
         exit 1
     fi
 
@@ -155,7 +195,9 @@ fi
 
 if [[ "$1" == "add" ]]; then
 
-    if ! version=$(quig_add $2); then
+    version=$(quig_add $2)
+    exit_status=$?    
+    if [ $exit_status -gt 0 ]; then
         exit 1
     fi
     
@@ -176,7 +218,7 @@ fi
 
 if [[ "$1" == "list" ]]; then
 
-    # use outer set of parens to parse arrya
+    # use outer set of parens to parse array
     if ! version_array=($(quig_list)); then
         echo "No versions found"     
         exit 1
