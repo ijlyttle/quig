@@ -27,5 +27,6 @@ jobs:
               owner: "${{ github.repository_owner }}",
               repo: "${{ github.event.repository.name }}",
               tag_name: "v${{ github.ref_name }}",
-              name: "${{ github.event.repository.name }} ${{ github.ref_name }}"
+              name: "${{ github.event.repository.name }} ${{ github.ref_name }}",
+              target_commitish: "${{ github.sha }}"
             });
