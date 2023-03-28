@@ -15,4 +15,9 @@ jobs:
         run: |
           src/build.sh
 
-
+      - name: Create release
+        uses: actions/github-script
+        id: my-script
+        with:
+          result-encoding: string
+          script: return "I will be string (not JSON) encoded!"
