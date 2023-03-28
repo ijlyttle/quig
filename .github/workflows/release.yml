@@ -20,4 +20,9 @@ jobs:
         id: my-script
         with:
           result-encoding: string
-          script: return "I will be string (not JSON) encoded!"
+          script: |
+            github.rest.repos.createRelease({
+              ${{ github.repository_owner }},
+              ${{ github.event.repository.name }},
+              "v0.0.9000",
+            });
