@@ -22,7 +22,7 @@ jobs:
           result-encoding: string
           script: |
             github.rest.repos.createRelease({
-              ${{ github.repository_owner }},
-              ${{ github.event.repository.name }},
-              "v0.0.9000"
+              owner: ${{ github.repository_owner }},
+              repo: ${{ github.event.repository.name }},
+              tag_name: "v0.0.9000"
             });
