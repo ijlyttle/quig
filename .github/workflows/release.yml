@@ -26,5 +26,6 @@ jobs:
             github.rest.repos.createRelease({
               owner: "${{ github.repository_owner }}",
               repo: "${{ github.event.repository.name }}",
-              tag_name: "v0.0.9000"
+              tag_name: "v$GITHUB_REF_NAME",
+              name: "${{ github.event.repository.name }} $GITHUB_REF_NAME"
             });
