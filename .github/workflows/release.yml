@@ -24,5 +24,5 @@ jobs:
             github.rest.repos.createRelease({
               ${{ github.repository_owner }},
               ${{ github.event.repository.name }},
-              "v0.0.9000",
+              "v0.0.9000"
             });
