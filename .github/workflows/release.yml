@@ -16,7 +16,7 @@ jobs:
           src/build.sh
 
       - name: Create release
-        uses: actions/github-script
+        uses: actions/github-script@v6
         id: my-script
         with:
           result-encoding: string
