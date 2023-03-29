@@ -16,7 +16,7 @@ jobs:
           result-encoding: string
           script: |
             const tag = context.ref.replace(/refs\/(tags|pull)\//, "");
-            github.rest.repos.createRelease({
+            const result = github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: `v${tag}`,
@@ -24,6 +24,7 @@ jobs:
               target_commitish: context.sha,
               body: ""
             });
+            console.log(result);
 
   upload: 
     needs: release
@@ -53,12 +54,8 @@ jobs:
               tag
             };
             console.log(info)
-            // const release = await github.repos.getReleaseByTag({
-            //   owner: context.repo.owner,
-            //   repo: context.repo.repo,
-            //   tag
-            // });
-            console.log(release.data);
+            // const release = await github.repos.getReleaseByTag(info);
+            // console.log(release.data);
             // Upload the release asset
             // await github.repos.uploadReleaseAsset({
             //   owner: context.repo.owner,
