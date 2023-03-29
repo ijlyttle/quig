@@ -19,15 +19,38 @@ jobs:
 
       - name: Create release
         uses: actions/github-script@v6
-        id: my-script
         with:
           result-encoding: string
           script: |
+            const tag = context.ref.replace("refs/tags/", "");
             github.rest.repos.createRelease({
-              owner: "${{ github.repository_owner }}",
-              repo: "${{ github.event.repository.name }}",
-              tag_name: "v${{ github.ref_name }}",
-              name: "${{ github.event.repository.name }} ${{ github.ref_name }}",
-              target_commitish: "${{ github.sha }}",
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `v${tag}`,
+              name: context.repo.repo tag,
+              target_commitish: context.sha,
               body: ""
             });
+
+        # ref: https://til.simonwillison.net/github-actions/attach-generated-file-to-release
+      - name: Upload tarball
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const fs = require("fs");
+            const tag = context.ref.replace("refs/tags/", "");
+            // Get release for this tag
+            const release = await github.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag
+            });
+            // Upload the release asset
+            // await github.repos.uploadReleaseAsset({
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   release_id: release.data.id,
+            //   name: "app.zip",
+            //   data: await fs.readFileSync("app.zip")
+            // });
