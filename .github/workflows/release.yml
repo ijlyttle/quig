@@ -1,9 +1,7 @@
 on:  
   push:
     tags: ["*"]
-  pull_request: 
-    branches: [main]
-
+    
 jobs:
   release:
     runs-on: ubuntu-latest
