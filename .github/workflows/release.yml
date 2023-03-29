@@ -24,7 +24,7 @@ jobs:
               target_commitish: context.sha,
               body: ""
             });
-            console.log(result);
+            console.log(result.data);
 
   upload: 
     needs: release
@@ -54,8 +54,8 @@ jobs:
               tag
             };
             console.log(info)
-            // const release = await github.repos.getReleaseByTag(info);
-            // console.log(release.data);
+            const release = await github.repos.getReleaseByTag(info);
+            console.log(release.data);
             // Upload the release asset
             // await github.repos.uploadReleaseAsset({
             //   owner: context.repo.owner,
