@@ -47,11 +47,17 @@ jobs:
             const fs = require("fs");
             const tag = context.ref.replace(/refs\/(tags|pull)\//, "");
             // Get release for this tag
-            const release = await github.repos.getReleaseByTag({
+            const info = {
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag
-            });
+            };
+            console.log(info)
+            // const release = await github.repos.getReleaseByTag({
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   tag
+            // });
             console.log(release.data);
             // Upload the release asset
             // await github.repos.uploadReleaseAsset({
