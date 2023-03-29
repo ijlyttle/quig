@@ -16,7 +16,7 @@ jobs:
           result-encoding: string
           script: |
             const tag = context.ref.replace(/refs\/(tags|pull)\//, "");
-            const result = github.rest.repos.createRelease({
+            const result = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: `v${tag}`,
