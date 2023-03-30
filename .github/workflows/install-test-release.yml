@@ -1,0 +1,21 @@
+name: Install and Test
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps: 
+
+      - name: Install quig
+        run: |
+          curl -Ls https://github.com/ijlyttle/quig/releases/download/latest/quig.tar.gz |
+            sudo tar xz -C /opt
+          ln -sf /opt/quig/bin/quig /usr/local/bin/quig
+        
+      - name: Install quarto
+        run: |
+          quig add release
+          quarto --version
