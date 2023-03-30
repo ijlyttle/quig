@@ -1,0 +1,42 @@
+on:  
+  release:
+    types: [created]
+
+jobs:
+  upload: 
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build tarball
+        run: |
+          src/build.sh
+
+        # ref: https://til.simonwillison.net/github-actions/attach-generated-file-to-release
+      - name: Upload tarball
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const fs = require("fs");
+            const tag = context.ref.replace(/refs\/(tags|pull)\//, "");
+            // Get release for this tag
+            const info = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag
+            };
+            console.log(info)
+            const release = await github.repos.getReleaseByTag(info);
+            console.log(release.data);
+            // Upload the release asset
+            // await github.repos.uploadReleaseAsset({
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   release_id: release.data.id,
+            //   name: "app.zip",
+            //   data: await fs.readFileSync("app.zip")
+            // });          

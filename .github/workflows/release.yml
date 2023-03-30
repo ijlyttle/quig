@@ -1,0 +1,25 @@
+on:  
+  push:
+    tags: ["*"]
+    
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create release
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const tag = context.ref.replace(/refs\/(tags|pull)\//, "");
+            const result = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `v${tag}`,
+              name: `${context.repo.repo} ${tag}`,
+              target_commitish: context.sha,
+              body: ""
+            });
+            console.log(result.data);
