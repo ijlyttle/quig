@@ -32,12 +32,8 @@ jobs:
             const ghOutput = `release_id=${result.data.id}`;
             console.log(ghOutput);
             console.log(process.env.GITHUB_OUTPUT);
-            
-            //fs.writeFile(process.env.GITHUB_OUTPUT, ghOutput, err => {
-            //  if (err) {
-            //    console.error(err);
-            //  }
-            //});
+
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, ghOutput);
 
       - name: Upload artifact
         run: |
