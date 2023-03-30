@@ -1,3 +1,5 @@
+name: Release and Upload
+
 on:  
   push:
     tags: 
@@ -10,10 +12,13 @@ jobs:
       contents: write
     steps:
       - name: Create release
+        id: create-release
         uses: actions/github-script@v6
         with:
           result-encoding: string
           script: |
+            const fs = require("fs");
+
             const tag = context.ref.replace("refs/tags/", "");
             const result = await github.rest.repos.createRelease({
               owner: context.repo.owner,
@@ -23,4 +28,17 @@ jobs:
               target_commitish: context.sha,
               body: ""
             });
-            console.log(result.data);
+
+            const output = `release_id=${result.data.id}`;
+
+            fs.writeFile(process.env.GITHUB_OUTPUT, output, (err) => {
+              if (err)
+                console.log(err);
+              else {
+                console.log(data);
+              }
+            });
+
+      - name: Upload artifact
+        run: |
+          echo "release_id: ${{ steps.create-release.outputs.release_id }}"
