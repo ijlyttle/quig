@@ -36,5 +36,5 @@ jobs:
 
       - name: Upload artifact
         run: |
-          echo "release_id: ${{ steps.create-release.outputs.release_id }}"
+          echo "release_id: ${{ steps.create-release.outputs.result }}"
 
