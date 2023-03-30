@@ -30,14 +30,9 @@ jobs:
             });
 
             const output = `release_id=${result.data.id}`;
-
-            fs.writeFile(process.env.GITHUB_OUTPUT, output, (err) => {
-              if (err)
-                console.log(err);
-              else {
-                console.log(output);
-              }
-            });
+            console.log(output);
+            
+            await fs.writeFile(process.env.GITHUB_OUTPUT, output);
 
       - name: Upload artifact
         run: |
