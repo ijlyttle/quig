@@ -29,10 +29,10 @@ jobs:
               body: ""
             });
 
-            const output = `release_id=${result.data.id}`;
-            console.log(output);
+            const ghOutput = `release_id=${result.data.id}`;
+            console.log(ghOutput);
 
-            fs.writeFile(process.env.GITHUB_OUTPUT, output, err => {
+            fs.writeFile(process.env.GITHUB_OUTPUT, ghOutput, err => {
               if (err) {
                 console.error(err);
               }
