@@ -20,7 +20,7 @@ jobs:
             const fs = require("fs");
 
             const tag = context.ref.replace("refs/tags/", "");
-            const result = await github.rest.repos.createRelease({
+            const response = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: `${tag}`,
@@ -29,7 +29,10 @@ jobs:
               body: ""
             });
 
-            return `release_id=${result.data.id}`;
+            const result = `release_id=${response.data.id}`;
+            console.log(result);
+
+            return result;
 
       - name: Upload artifact
         run: |
