@@ -1,0 +1,33 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+  steps: 
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build tarball
+      id: build-tarball
+      run: |
+        filepath=$(src/build-tarball.sh)
+        echo "filepath=$filepath" >> $GITHUB_OUTPUT
+
+    - name: Install quig
+      run: |
+        tar xzf ${{ steps.build-tarball.outputs.filepath }} -C /opt
+        ln -sf /opt/quig/bin/quig /usr/local/bin/quig
+      
+    - name: Install quarto
+      run: |
+        quig add release
+        quarto --version
