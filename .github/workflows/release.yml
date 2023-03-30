@@ -40,7 +40,6 @@ jobs:
         id: build-tarball
         run: |
           filepath=$(src/build-tarball.sh)
-          echo "filepath=$filepath"
           echo "filepath=$filepath" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
@@ -49,12 +48,13 @@ jobs:
           result-encoding: string
           script: |
             const fs = require("fs");
+            const path = require("path");
 
             await github.rest.repos.uploadReleaseAsset({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: ${{ steps.create-release.outputs.result }},
-              name: "quig.tar.gz",
-              data: await fs.readFileSync("../quig.tar.gz")
+              name: path.basename(${{ steps.build-tarball.outputs.filepath }}),
+              data: await fs.readFileSync(${{ steps.build-tarball.outputs.filepath }})
             });            
 
