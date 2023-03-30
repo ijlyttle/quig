@@ -12,7 +12,8 @@ filename="quig.tar.gz"
 
 cd ..
 tar --exclude=".git*" --exclude="src" -czvf $filename quig
+filepath=$(realpath $filename)
 cd quig
 
-echo $filename
+echo $filepath
 exit 0;

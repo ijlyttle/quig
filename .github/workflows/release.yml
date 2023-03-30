@@ -37,8 +37,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build tarball
+        id: build-tarball
         run: |
-          src/build.sh
+          filepath=$(src/build-tarball.sh)
+          echo filepath
+          echo "filepath=$filepath" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
         uses: actions/github-script@v6
