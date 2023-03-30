@@ -31,8 +31,8 @@ jobs:
               tag
             };
             console.log(info)
-            const release = await github.repos.getReleaseByTag(info);
-            console.log(release);
+            const release = await github.rest.repos.getReleaseByTag(info);
+            console.log(release.data);
             // Upload the release asset
             // await github.repos.uploadReleaseAsset({
             //   owner: context.repo.owner,
