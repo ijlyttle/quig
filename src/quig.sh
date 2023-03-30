@@ -99,7 +99,6 @@ function quig_list()
 function quig_default_get()
 {
     if ! [ -f $quarto_shim ]; then
-        echo >&2 "ERROR: Cannot find quarto installation at $quarto_shim"
         exit 1
     fi
 
@@ -142,12 +141,14 @@ function quig_default() {
         fi
     fi
 
-    # get default, return
-    if ! local version=$(quig_default_get); then
-        echo $version 
+    # get default, return    
+    local version=$(quig_default_get $1)
+    local exit_status=$?
+    if [ $exit_status -gt 0 ]; then
+        echo >&2 "ERROR: Cannot find quarto installation at $quarto_shim"
         exit 1
-    fi
-    
+    fi  
+
     echo $version
     exit 0
 }
@@ -335,7 +336,7 @@ if [[ "$1" == "add" ]]; then
     echo "Added Quarto $version to \`$quarto_directory\`"    
 
     # if no default, set default
-    version_default=$(quig_default)
+    version_default=$(quig_default_get)
     exit_status=$?    
     if [ $exit_status -gt 0 ]; then
         # need to set default
