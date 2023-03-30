@@ -33,8 +33,9 @@ jobs:
             console.log(ghOutput);
             console.log(process.env.GITHUB_OUTPUT);
 
-            fs.appendFileSync(process.env.GITHUB_OUTPUT, ghOutput);
+            fs.appendFileSync("temp.txt", ghOutput);
 
       - name: Upload artifact
         run: |
           echo "release_id: ${{ steps.create-release.outputs.release_id }}"
+          cat temp.txt
