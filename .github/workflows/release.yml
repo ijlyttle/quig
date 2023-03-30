@@ -29,7 +29,7 @@ jobs:
               body: ""
             });
 
-            const result = `release_id=${response.data.id}`;
+            const result = response.data.id;
             console.log(result);
 
             return result;
