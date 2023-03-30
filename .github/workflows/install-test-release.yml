@@ -1,6 +1,10 @@
 name: Install and Test
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   release:
     types: [created]
 
@@ -11,9 +15,9 @@ jobs:
 
       - name: Install quig
         run: |
-          curl -Ls https://github.com/ijlyttle/quig/releases/download/latest/quig.tar.gz |
+          sudo curl -Ls https://github.com/ijlyttle/quig/releases/latest/download/quig.tar.gz |
             sudo tar xz -C /opt
-          ln -sf /opt/quig/bin/quig /usr/local/bin/quig
+          sudo ln -sf /opt/quig/bin/quig /usr/local/bin/quig
         
       - name: Install quarto
         run: |
