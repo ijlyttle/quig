@@ -32,11 +32,11 @@ jobs:
             const ghOutput = `release_id=${result.data.id}`;
             console.log(ghOutput);
 
-            fs.writeFile(process.env.GITHUB_OUTPUT, ghOutput, err => {
-              if (err) {
-                console.error(err);
-              }
-            });
+            //fs.writeFile(process.env.GITHUB_OUTPUT, ghOutput, err => {
+            //  if (err) {
+            //    console.error(err);
+            //  }
+            //});
 
       - name: Upload artifact
         run: |
