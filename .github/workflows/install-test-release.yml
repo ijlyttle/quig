@@ -2,7 +2,7 @@ name: Install and Test
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   build-test:
