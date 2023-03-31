@@ -5,7 +5,7 @@ If you use Windows, you could use this with WSL or an Ubuntu container.
 
 This is aimed at folks who want to stay current with the "bleeding-edge" of Quarto, and thus may find it handy to work with multiple versions, switching between them.
 
-It is inspired by [pyenv](https://github.com/pyenv/pyenv) and [rig](https://github.com/r-lib/rig); my deepest apologies to rig's author, Gábor Csárdi, for appropriating the name for this pale imitation. In the event that Posit wishes to create and support a similar (presumably much better) tool, I would happily step aside and support such an effort. 
+It is inspired by [pyenv](https://github.com/pyenv/pyenv) and [rig](https://github.com/r-lib/rig); my deepest apologies to rig's author, Gábor Csárdi, for appropriating the name for this pale imitation. In the event that Posit wishes to create and support a similar (presumably much better) tool, I would happily step aside to support such an effort. 
 
 ## Strategy
 
@@ -78,7 +78,21 @@ Let's say you've set `QUARTO_VERSION="pre_release"`; this will keep you up-to-da
 quig upgrade
 ```
 
+### Command list
+
+```default
+quig add        - add Quarto version
+quig clean      - remove all Quarto versions except deault
+quig default    - get or set default Quarto version
+quig list       - list all Quarto versions
+quig resolve    - resolve to Quarto version
+quig rm         - remove Quarto version
+quig upgrade    - add Quarto version, set as default, clean
+```
+
 ## Installation
+
+These instructions are a bit awkward. I have found that `sudo` behaves differently on MacOS from Ubuntu, so I tried to find a sequence that works on both.
 
 Switch to super-user (enter password as needed):
 
@@ -86,7 +100,8 @@ Switch to super-user (enter password as needed):
 sudo -i
 ```
 
-Run these commands:
+Run these commands to install quig into your `/opt` directory, then link `/usr/local/bin/quig` to the [`quig` script](https://github.com/ijlyttle/quig/blob/main/src/quig.sh) in `/opt/quig/`.
+
 
 ```bash
 curl -Ls https://github.com/ijlyttle/quig/releases/latest/download/quig.tar.gz |
@@ -94,11 +109,11 @@ curl -Ls https://github.com/ijlyttle/quig/releases/latest/download/quig.tar.gz |
 ln -sf /opt/quig/bin/quig /usr/local/bin/quig
 ```
 
+Exit from super-user:
+
 ```bash
 exit
 ```
-
-This installs quig into your `/opt` directory, then links `/usr/local/bin/quig` to the [`quig` script](https://github.com/ijlyttle/quig/blob/main/src/quig.sh).
 
 
 To uninstall:
