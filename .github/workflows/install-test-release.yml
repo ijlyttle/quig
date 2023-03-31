@@ -1,8 +1,12 @@
 name: Install and Test
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: [Release and Upload]
+    types:
+      - completed
+
+token: ${{ secrets.GH_TOKEN }}
 
 jobs:
   build-test:
