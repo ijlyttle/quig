@@ -6,8 +6,6 @@ on:
     types:
       - completed
 
-token: ${{ secrets.GH_TOKEN }}
-
 jobs:
   build-test:
     runs-on: ubuntu-latest

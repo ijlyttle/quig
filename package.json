@@ -1,7 +1,7 @@
 {
   "name": "quig",
   "author": "Ian Lyttle",
-  "version": "0.0.9903",
+  "version": "0.0.9904",
   "license": "MIT",
   "description": "Installer for Quarto, supported on Ubuntu and MacOS; done using bash scripts",
   "dependencies": {"curl": "", "jq": ""}
