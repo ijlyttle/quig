@@ -80,5 +80,38 @@ quig upgrade
 
 ## Installation
 
-???
+Switch to super-user (enter password as needed):
 
+```bash
+sudo -i
+```
+
+Run these commands:
+
+```bash
+curl -Ls https://github.com/ijlyttle/quig/releases/latest/download/quig.tar.gz |
+  tar xz -C /opt
+ln -sf /opt/quig/bin/quig /usr/local/bin/quig
+```
+
+```bash
+exit
+```
+
+This installs quig into your `/opt` directory, then links `/usr/local/bin/quig` to the [`quig` script](https://github.com/ijlyttle/quig/blob/main/src/quig.sh).
+
+
+To uninstall:
+
+```bash
+sudo -i
+```
+
+```bash
+rm /usr/local/bin/quig
+rm -r /opt/quig
+```
+
+```bash
+exit
+```
