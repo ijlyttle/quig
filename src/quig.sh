@@ -1,6 +1,6 @@
 #!/bin/bash
 
-quig_version=0.0.9907
+quig_version=0.0.9909
 quarto_directory="/opt/quarto"
 regex_version="[0-9]+\.[0-9]+\.[0-9]+"
 quarto_shim="/usr/local/bin/quarto"

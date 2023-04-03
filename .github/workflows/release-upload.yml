@@ -39,7 +39,8 @@ jobs:
       - name: Build tarball
         id: build-tarball
         run: |
-          filepath=$(src/build-tarball.sh)
+          src/build.sh
+          filepath=$(src/make-tarball.sh)
           echo "filepath=$filepath" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
