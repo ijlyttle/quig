@@ -138,3 +138,11 @@ rm -r /opt/quig
 ```bash
 exit
 ```
+
+### Development
+
+If you are developing quig locally, you can install from the root directory:
+
+```bash
+src/install.sh
+```

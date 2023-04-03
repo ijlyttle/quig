@@ -14,17 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build tarball
-        id: build-tarball
+      - name: Build and install quig
         run: |
-          filepath=$(src/build-tarball.sh)
-          echo "filepath=$filepath" >> $GITHUB_OUTPUT
-
-      - name: Install quig
-        run: |
-          tar xzf ${{ steps.build-tarball.outputs.filepath }} -C /opt
-          ln -sf /opt/quig/bin/quig /usr/local/bin/quig
-          quig --version
+          src/install.sh
 
       - name: Install quarto
         run: |
