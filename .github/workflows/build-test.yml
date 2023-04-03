@@ -24,7 +24,8 @@ jobs:
         run: |
           tar xzf ${{ steps.build-tarball.outputs.filepath }} -C /opt
           ln -sf /opt/quig/bin/quig /usr/local/bin/quig
-        
+          quig --version
+
       - name: Install quarto
         run: |
           quig add release

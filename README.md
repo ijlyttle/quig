@@ -92,6 +92,8 @@ quig upgrade    - add Quarto version, set as default, clean
 
 ## Installation
 
+quig depends on the `curl` and `jq` packages.
+
 These instructions are a bit awkward. I have found that `sudo` behaves differently on MacOS from Ubuntu, so I tried to find a sequence that works on both.
 
 Switch to super-user (enter password as needed):

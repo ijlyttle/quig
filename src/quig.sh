@@ -1,5 +1,6 @@
 #!/bin/bash
 
+quig_version=0.0.9907
 quarto_directory="/opt/quarto"
 regex_version="[0-9]+\.[0-9]+\.[0-9]+"
 quarto_shim="/usr/local/bin/quarto"
@@ -460,11 +461,16 @@ if [[ "$1" == "upgrade" ]]; then
     exit 0
 fi
 
+if [[ "$1" == "--version" ]]; then
+    echo -e $quig_version
+    exit 0
+fi
+
 if [[ "$1" == "help" || -z $1 ]]; then
     echo -e $(quig_help)
     exit 0
 fi
 
-# no options recignized
+# no options recognized
 echo >&2 "ERROR: option \`${1}\` not recognized; use \`quig help\` to see options."
 exit 1
