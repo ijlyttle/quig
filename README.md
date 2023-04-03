@@ -90,7 +90,15 @@ quig rm         - remove Quarto version
 quig upgrade    - add Quarto version, set as default, clean
 ```
 
+also 
+
+```default 
+quig --version
+```
+
 ## Installation
+
+quig depends on the `curl` and `jq` packages.
 
 These instructions are a bit awkward. I have found that `sudo` behaves differently on MacOS from Ubuntu, so I tried to find a sequence that works on both.
 

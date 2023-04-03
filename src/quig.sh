@@ -1,5 +1,6 @@
 #!/bin/bash
 
+quig_version=0.0.9907
 quarto_directory="/opt/quarto"
 regex_version="[0-9]+\.[0-9]+\.[0-9]+"
 quarto_shim="/usr/local/bin/quarto"
@@ -270,7 +271,7 @@ function quig_help()
     echo "\t  - manages symlink from \`/usr/local/bin/quarto\` to \`/opt/quarto/<version>\`.\n"
     echo "\n"
     echo "USAGE:\n"
-    echo "\t  quig [SUBCOMMAND]\n"
+    echo "\t  quig [SUBCOMMAND] [OPTIONS]\n"
     echo "\n"
     echo "SUBCOMMANDS:\n"
     echo "\t  add\n"
@@ -282,6 +283,9 @@ function quig_help()
     echo "\t  rm\n"
     echo "\t  upgrade\n"
     echo "\n"
+    echo "OPTIONS:\n"
+    echo "\t  --version\n"
+    echo "\n"     
     echo "EXAMPLES:\n"
     echo "\t  # Add latest pre-release snapshot\n"
     echo "\t  sudo quig add pre_release\n"
@@ -460,11 +464,16 @@ if [[ "$1" == "upgrade" ]]; then
     exit 0
 fi
 
+if [[ "$1" == "--version" ]]; then
+    echo -e $quig_version
+    exit 0
+fi
+
 if [[ "$1" == "help" || -z $1 ]]; then
     echo -e $(quig_help)
     exit 0
 fi
 
-# no options recignized
+# no options recognized
 echo >&2 "ERROR: option \`${1}\` not recognized; use \`quig help\` to see options."
 exit 1
