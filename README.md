@@ -90,6 +90,12 @@ quig rm         - remove Quarto version
 quig upgrade    - add Quarto version, set as default, clean
 ```
 
+also 
+
+```default 
+quig --version
+```
+
 ## Installation
 
 quig depends on the `curl` and `jq` packages.
