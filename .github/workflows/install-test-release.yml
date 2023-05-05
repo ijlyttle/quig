@@ -13,7 +13,7 @@ jobs:
 
       - name: Install quig
         run: |
-          curl -Ls https://github.com/ijlyttle/quig/releases/latest/download/quig.tar.gz |
+          curl -Ls https://github.com/pyqr-dev/quig/releases/latest/download/quig.tar.gz |
             tar xz -C /opt
           ln -sf /opt/quig/bin/quig /usr/local/bin/quig
         

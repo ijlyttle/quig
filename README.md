@@ -108,11 +108,11 @@ Switch to super-user (enter password as needed):
 sudo -i
 ```
 
-Run these commands to install quig into your `/opt` directory, then link `/usr/local/bin/quig` to the [`quig` script](https://github.com/ijlyttle/quig/blob/main/src/quig.sh) in `/opt/quig/`.
+Run these commands to install quig into your `/opt` directory, then link `/usr/local/bin/quig` to the [`quig` script](https://github.com/pyqr-dev/quig/blob/main/src/quig.sh) in `/opt/quig/`.
 
 
 ```bash
-curl -Ls https://github.com/ijlyttle/quig/releases/latest/download/quig.tar.gz |
+curl -Ls https://github.com/pyqr-dev/quig/releases/latest/download/quig.tar.gz |
   tar xz -C /opt
 ln -sf /opt/quig/bin/quig /usr/local/bin/quig
 ```
