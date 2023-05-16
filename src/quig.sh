@@ -168,7 +168,8 @@ function quig_add()
     # test if version exists locally
     if [[ -f "$quarto_directory/$version/bin/quarto" ]]; then
         echo >&2 "Quarto version $version already exits at \`/opt/quarto\`."
-        exit 1
+        # this should not be an error, it's already there
+        exit 0
     fi
 
     # create directory
